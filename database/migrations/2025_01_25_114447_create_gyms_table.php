@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,7 +24,7 @@ return new class extends Migration
             $table->time('open_time_at');
             $table->time('closed_time_at');
             $table->foreignId('city_id')->constrained()->cascadeOnDelete();
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -35,3 +37,4 @@ return new class extends Migration
         Schema::dropIfExists('gyms');
     }
 };
+

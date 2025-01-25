@@ -8,9 +8,11 @@ use App\Models\Facility;
 use App\Models\Gym;
 use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -94,9 +96,28 @@ class GymResource extends Resource
         return $table
             ->columns([
                 //
-            ])
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('city.name'),
+
+                Tables\Columns\ImageColumn::make('thumbnail'),
+
+                Tables\Columns\IconColumn::make('is_popular')
+                ->boolean()
+                ->trueColor('success')
+                ->falseColor('danger')
+                ->trueIcon('heroicon-o-check-circle')
+                ->falseIcon('heroicon-o-x-circle')
+                ->label('Popular'),
+
+            ])  
             ->filters([
                 //
+                SelectFilter::make('city_id')
+                    ->label('city')
+                    ->relationship('city','name'),
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
