@@ -24,6 +24,26 @@ class GymTestimonialResource extends Resource
         return $form
             ->schema([
                 //
+                Forms\Components\TextInput::make('name')
+                ->required()
+                ->maxLength(255),
+
+                Forms\Components\TextInput::make('occupation')
+                ->required()
+                ->maxLength(255),
+
+                Forms\Components\FileUpload::make('photo')
+                ->image()
+                ->required(),
+
+                Forms\Components\Select::make('gym_id')
+                ->relationship('gym', 'name')
+                ->searchable()
+                ->preload()
+                ->required(),
+
+                Forms\Components\Textarea::make('message')
+                ->required(),
             ]);
     }
 
@@ -32,6 +52,13 @@ class GymTestimonialResource extends Resource
         return $table
             ->columns([
                 //
+                Tables\Columns\TextColumn::make('photo'),
+                
+                Tables\Columns\TextColumn::make('name')
+                ->searchable(),
+
+                Tables\Columns\ImageColumn::make('gym.thumbnail'),
+               
             ])
             ->filters([
                 //
