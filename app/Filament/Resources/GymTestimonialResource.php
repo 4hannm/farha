@@ -7,6 +7,7 @@ use App\Filament\Resources\GymTestimonialResource\RelationManagers;
 use App\Models\GymTestimonial;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\FormsComponent;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -52,7 +53,9 @@ class GymTestimonialResource extends Resource
         return $table
             ->columns([
                 //
-                Tables\Columns\TextColumn::make('photo'),
+                Tables\Columns\ImageColumn::make('photo')
+                ->circular(),
+
                 
                 Tables\Columns\TextColumn::make('name')
                 ->searchable(),
