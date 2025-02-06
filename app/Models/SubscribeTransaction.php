@@ -11,7 +11,7 @@ class SubscribeTransaction extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $filable=[
+    protected $fillable=[
         'booking_trx_id',
         'name',
         'phone',
@@ -20,17 +20,17 @@ class SubscribeTransaction extends Model
         'total_amount',
         'duration',
         'is_paid',
-        'starter_at',
+        'started_at',
         'ended_at',
         'subscribe_package_id',
     ];
 
     protected $cast=[
-        'starter_at' =>'date',
+        'started_at' =>'date',
         'ended_at' =>'date'
     ];
 
-    public function subscibePackage(): BelongsTo
+    public function subscribePackage(): BelongsTo
     {
         return $this->belongsTo(SubscribePackage::class, 'subscribe_package_id');
     }

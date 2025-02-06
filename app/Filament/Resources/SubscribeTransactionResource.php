@@ -11,8 +11,10 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\FormsComponent;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -90,7 +92,7 @@ class SubscribeTransactionResource extends Resource
                             ->numeric()
                             ->prefix('IDR'),
 
-                            Forms\Components\DatePicker::make('starter_at')
+                            Forms\Components\DatePicker::make('started_at')
                             ->required(),
 
                             Forms\Components\DatePicker::make('ended_at')
@@ -156,12 +158,50 @@ class SubscribeTransactionResource extends Resource
         return $table
             ->columns([
                 //
+                Tables\Columns\ImageColumn::make('subscribePackage.icon'),
+
+                Tables\Columns\TextColumn::make('name')
+                ->searchable(),
+
+                Tables\Columns\TextColumn::make('booking_trx_id')
+                ->searchable(),
+
+                Tables\Columns\IconColumn::make('is_paid')
+                ->boolean()
+                ->trueColor('success')
+                ->falseColor('danger')
+                ->trueIcon('heroicon-o-check-circle')
+                ->falseIcon('heroicon-o-x-circle')
+                ->label('Terverifikasi'),
             ])
             ->filters([
                 //
+                SelectFilter::make('subscribe_package_id')
+                ->label('Subscribe Package')
+                ->relationship('subscribePackage', 'name'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make(), 
+                Tables\Actions\ViewAction::make(),
+
+
+                Tables\Actions\Action::make('approve')
+                ->label('Approve')
+                ->action(function(SubscribeTransaction $record) {
+                    $record->is_paid = true;
+                    $record->save();
+
+                    // Trigger the custom notification
+
+                    Notification::make()
+                        ->title('Transaction Approved')
+                        ->success()
+                        ->body('The transaction has benn successfully approved.')
+                        ->send();
+                })
+                ->color('success')
+                ->requiresConfirmation()
+                ->visible(fn (SubscribeTransaction $record) => !$record->is_paid),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
