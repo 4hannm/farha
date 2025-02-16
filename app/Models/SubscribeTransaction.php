@@ -41,7 +41,7 @@ class SubscribeTransaction extends Model
     {
         $prefix = 'FITBWA';
         do{
-            $randomString = $prefix . mt_rand(1000,9999);
+            $randomString = $prefix . mt_rand(1000, 9999);
         } while (self::where('booking_trx_id', $randomString)->exists());
 
         return $randomString;

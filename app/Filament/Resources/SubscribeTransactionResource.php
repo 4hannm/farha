@@ -12,6 +12,7 @@ use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Forms\FormsComponent;
 use Filament\Notifications\Notification;
+use Filament\Resources\Pages\ViewRecord;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
@@ -181,8 +182,8 @@ class SubscribeTransactionResource extends Resource
                 ->relationship('subscribePackage', 'name'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(), 
                 Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(), 
 
 
                 Tables\Actions\Action::make('approve')
@@ -223,6 +224,7 @@ class SubscribeTransactionResource extends Resource
             'index' => Pages\ListSubscribeTransactions::route('/'),
             'create' => Pages\CreateSubscribeTransaction::route('/create'),
             'edit' => Pages\EditSubscribeTransaction::route('/{record}/edit'),
+            // 'view' => Pages\ViewSubscribeTransaction::route('/{record}'),
         ];
     }
 }
